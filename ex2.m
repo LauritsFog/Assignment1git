@@ -14,7 +14,7 @@ xbar = 1/2*(a+b-alpha-beta);
 % Approximate solution from (2.104)
 utilde = @(x) x-xbar+w0*tanh(w0*(x-xbar)/(2*epsilon));
 
-h = (1/(2^2));
+h = (1/(2^4));
 
 N = (b-a)/h;
 
@@ -29,12 +29,16 @@ U0(end) = beta;
 % [F,J] = ex2FdF(x,h,epsilon);
 
 % # iterations of Newton's method
-n = 1;
+n = 50;
 
 % Solve using Newton's method
 U = Newton(@ex2FdF,U0,h,epsilon,alpha,beta,n);
 
+% [xout,u] = ode45(@(t,y) ex2odefun(t,y,epsilon),[x(1),x(end)], [alpha,0]);
+
 figure
-plot(x,U0)
+plot(x,utilde(x))
+% hold on
+% plot(xout,u)
 hold on
 plot(x,U(:,end))

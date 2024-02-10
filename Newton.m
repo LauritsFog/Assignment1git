@@ -11,8 +11,8 @@ function Uiter = Newton(FdF,U0,h,epsilon,alpha,beta,n)
         U = U + H;
 
         % Impose boundary conditions
-        U(1) = alpha;
-        U(end) = beta;
+        % U(1) = alpha;
+        % U(end) = beta;
 
         Uiter(:,i) = U;
         [F, dF] = FdF(U,h,epsilon);
