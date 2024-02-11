@@ -11,6 +11,6 @@ function [F, dF] = ex2FdF(U,h,epsilon)
     D2 = constructCenteredD2(n)./(h^2);
     
     % Compute F
-    F = epsilon*D2*U+(diag(D1*U)-eye(n))*U;
+    F = epsilon.*D2*U+(diag(D1*U)-eye(n))*U;
 
 end

@@ -1,4 +1,4 @@
-function [dudt] = ex2odefun(t,u,epsilon)
+function [dudt] = ex2odefun(x,u,epsilon)
 
     % We write the ODE as
     % u1' = u2
