@@ -1,22 +1,28 @@
-function Uiter = Newton(FdF,U0,h,epsilon,alpha,beta,n)
+function Uiter = Newton(FdF,U0,h,epsilon,tol,maxit)
     
-    Uiter = zeros(length(U0),n);
+    Uiter = U0;
 
     % Initialization
     U = U0;
     [F, dF] = FdF(U,h,epsilon); 
+    
     dU = -dF\F;  % This is the first step
- 
-    for i = 1:n
-        U = U + dU;
-        
-        % Impose boundary conditions
-        U(1) = alpha;
-        U(end) = beta;
 
-        Uiter(:,i) = U;
+    iter = 1;
+    err = inf;
+ 
+    while err > tol && iter < maxit
+
+        iter = iter + 1;
+
+        U(2:(end-1)) = U(2:(end-1)) + dU;
+        
+        Uiter = [Uiter U];
         [F, dF] = FdF(U,h,epsilon);
         dU = -dF\F;
+
+        err = norm(U-Uiter(:,iter-1),'inf');
+
     end
 
 end
