@@ -4,7 +4,12 @@ function [F, dF] = ex2FdF(U,h,epsilon)
     
     % Jacobian
     % dF = constructJacobian(U,h,epsilon);
+
     
+    
+    % Estimate jacobian at final positions
+    [dF,~] = jacobianest(@(u) ex2FdF(u,h,epsilon), U);
+
     % First order centered difference
     D1 = constructCenteredD1(n)./h;
     % Second order centered difference
@@ -12,10 +17,5 @@ function [F, dF] = ex2FdF(U,h,epsilon)
     
     % Compute F
     F = epsilon.*D2*U+(diag(D1*U)-eye(n))*U;
-    
-    fun = @(U) epsilon.*D2*U+(diag(D1*U)-eye(n))*U;
-    
-    % Estimate jacobian at final positions
-    [dF,~] = jacobianest(@(u) fun(u), U);
 
 end

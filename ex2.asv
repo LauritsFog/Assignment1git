@@ -1,3 +1,6 @@
+clc
+clear
+close all
 
 % Setup
 a = 0;
@@ -14,7 +17,7 @@ xbar = 1/2*(a+b-alpha-beta);
 % Approximate solution from (2.104)
 utilde = @(x) x-xbar+w0*tanh(w0*(x-xbar)/(2*epsilon));
 
-h = (1/(2^2));
+h = (1/(2^5));
 
 N = (b-a)/h;
 
@@ -26,21 +29,42 @@ U0 = utilde(x);
 U0(1) = alpha;
 U0(end) = beta;
 
-% [F,J] = ex2FdF(x,h,epsilon);
-
 % # iterations of Newton's method
-n = 1;
+n = 5;
 
 % Solve using Newton's method
 U = Newton(@ex2FdF,U0,h,epsilon,alpha,beta,n);
 
-% [xout,u] = ode45(@(t,y) ex2odefun(t,y,epsilon),[x(1),x(end)], [alpha,0]);
+% Using approximate solution from (2.104)
+% guess = [u' u'']
+guess = @(x) [(2*epsilon + w0^2*sech(w0*(x - xbar)/(2*epsilon))^2)/(2*epsilon);
+              -w0^3*tanh(w0*(x - xbar)/(2*epsilon))*sech(w0*(x - xbar)/(2*epsilon))^2/(2*epsilon^2)];
 
-sol = bvp4c(@(t,y) ex2odefun(t,y,epsilon)), @(ya,yb) ex2bcfun(ya,yb)
+solinit = bvpinit(x,guess);
+
+sol = bvp4c(@(x,u) ex2odefun(x,u,epsilon), ...
+            @(ua,ub) ex2bcfun(ua,ub,alpha,beta),solinit);
+
+%%
 
 figure
 plot(x,utilde(x))
-% hold on
-% plot(xout,u)
+hold on
+plot(sol.x,sol.y(1,:))
 hold on
 plot(x,U(:,end))
+legend("Approximation","Matlab sol","Newton sol")
+
+%%
+
+col = colormap(parula(n));
+
+figure
+plot(x,U,'Colors',col)
+
+%%
+
+% Get solution at our mesh nodes
+solinter = interp1(sol.x,sol.y(1,:),x');
+
+[F,J] = ex2FdF(solinter',h,epsilon);
