@@ -43,9 +43,11 @@ figure
 plot(x,utilde(x),"LineWidth",lnw)
 hold on
 plot(x,U(:,end),'-o',"LineWidth",lnw)
-legend("Approximation","Numerical solution",'Location','Southeast','Fontsize',15)
+xlabel("t")
+ylabel("u")
+legend("Analytical approximation","FDM solution",'Location','Southeast','Fontsize',15)
 grid on
-caption = sprintf("Plots of analytical approximation and numerical solution using FDM and NM \n" + ...
+caption = sprintf("Plots of analytical approximation and FDM solution \n" + ...
                    "epsilon = %.2f, alpha = %.2f, beta = %.2f",epsilon,alpha,beta);
 title(caption)
 
@@ -105,9 +107,11 @@ figure
 loglog(H(1:(end-1)),err,'-o',"LineWidth",lnw)
 hold on
 loglog(H(1:(end-1)),H(1:(end-1)).^2,'--',"LineWidth",lnw)
-legend("Finite difference error","h^2",'Location','Southeast','Fontsize',15)
+xlabel("h")
+ylabel("||e||")
+legend("FDM error","h^2",'Location','Southeast','Fontsize',15)
 grid on
-caption = sprintf("Convergence plot of the FDM and NM \n" + ...
+caption = sprintf("Convergence plot of the FDM \n" + ...
                    "epsilon = %.2f, alpha = %.2f, beta = %.2f",epsilon,alpha,beta);
 title(caption)
 
