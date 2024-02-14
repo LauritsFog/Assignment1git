@@ -1,10 +1,10 @@
-function Uiter = Newton(FdF,U0,h,epsilon,tol,maxit)
+function Uiter = Newton(FdF,U0,tol,maxit)
     
     Uiter = U0;
 
     % Initialization
     U = U0;
-    [F, dF] = FdF(U,h,epsilon); 
+    [F, dF] = FdF(U); 
     
     dU = -dF\F;  % This is the first step
 
@@ -18,7 +18,7 @@ function Uiter = Newton(FdF,U0,h,epsilon,tol,maxit)
         U(2:(end-1)) = U(2:(end-1)) + dU;
         
         Uiter = [Uiter U];
-        [F, dF] = FdF(U,h,epsilon);
+        [F, dF] = FdF(U);
         dU = -dF\F;
 
         err = norm(U-Uiter(:,iter-1),'inf');

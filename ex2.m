@@ -34,32 +34,36 @@ maxit = 300;
 tol = 10^(-5);
 
 % Solve using Newton's method
-U = Newton(@ex2FdF,U0,h,epsilon,tol,maxit);
+U = Newton(@(U) ex2FdF(U,h,epsilon),U0,tol,maxit);
 
 lnw = 1.5;
 
 figure
 plot(x,utilde(x),"LineWidth",lnw)
 hold on
-plot(x,U(:,end),"LineWidth",lnw)
+plot(x,U(:,end),'-o',"LineWidth",lnw)
 legend("Approximation","Numerical solution",'Location','Southeast','Fontsize',15)
 grid on
 
 % maximum # iterations of Newton's method
 maxit = 300;
-tol = 10^(-5);
+tol = 10^(-10);
 
-U = cell(1,8);
+n = 12;
 
-n = 8;
+U = cell(1,n);
+X = cell(1,n);
+H = zeros(n,1);
 
-for i = 2:n
+for i = 1:n
     
     h = (1/(2^i));
+    H(i) = h;
     
     N = (b-a)/h;
     
     x = linspace(a,b,N+1)';
+    X{i} = x;
     
     U0 = utilde(x);
     
@@ -68,11 +72,34 @@ for i = 2:n
     U0(end) = beta;
     
     % Solve using Newton's method
-    Uiter = Newton(@ex2FdF,U0,h,epsilon,tol,maxit);
+    Uiter = Newton(@(U) ex2FdF(U,h,epsilon),U0,tol,maxit);
 
-    U{i-1} = Uiter(:,end);
+    U{i} = Uiter(:,end);
 
 end
+
+err = zeros(n-1,1);
+
+for i = 1:(n-1)
+    
+    Ucoarse = U{i};
+    Ufine = U{i+1};
+
+    Xcoarse = X{i};
+    Xfine = X{i+1};
+
+    % err = computeL2Error1D(Ucoarse,Ufine,h(i));
+    
+    err(i) = computeInfError1D(Ucoarse,Ufine,Xcoarse,Xfine);
+
+end
+
+figure
+loglog(H(1:(end-1)),err,'-o',"LineWidth",lnw)
+hold on
+loglog(H(1:(end-1)),H(1:(end-1)).^2,'--',"LineWidth",lnw)
+legend("Finite difference error","h^2",'Location','Southeast','Fontsize',15)
+grid on
 
 % Solving using built-in matlab functions
 % % Using approximate solution from (2.104)
