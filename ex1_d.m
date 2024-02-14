@@ -1,3 +1,7 @@
+clear
+close all
+clc
+set(groot,'defaultAxesFontSize',12)
 
 u = @(x) exp(cos(x));
 d2u = @(x) -cos(x)*exp(cos(x)) + sin(x)^2*exp(cos(x));
@@ -68,14 +72,19 @@ for j = 1:n
     err2(j) = abs(d2u(xbar) - d2u_2);
 end
 
+lnw = 1.5;
+
 figure
-loglog(H, err1,'-o')
+loglog(H, err1,'-o',"LineWidth",lnw)
 hold on
-loglog(H, err2,'-o')
+loglog(H, err2,'-o',"LineWidth",lnw)
 hold on
-loglog(H,order3convergence,'--')
+loglog(H,order3convergence,'--',"LineWidth",lnw)
 hold on
-loglog(H,order4convergence,'--')
-legend(["(4,0)","(2,2)","h^4","h^3"])
+loglog(H,2*order4convergence,'--',"LineWidth",lnw)
+legend("(4,0)","(2,2)","h^4","h^3",'Location','Southeast','Fontsize',15)
+caption = sprintf("Convergence plots using two different 5-point FDM stencils \n");
+title(caption)
+grid on
 xlabel("h")
 ylabel("||e||")

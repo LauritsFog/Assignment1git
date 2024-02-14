@@ -1,6 +1,7 @@
-clc
 clear
 close all
+clc
+set(groot,'defaultAxesFontSize',12)
 
 % Setup
 a = 0;
@@ -44,6 +45,9 @@ hold on
 plot(x,U(:,end),'-o',"LineWidth",lnw)
 legend("Approximation","Numerical solution",'Location','Southeast','Fontsize',15)
 grid on
+caption = sprintf("Plots of analytical approximation and numerical solution using FDM and NM \n" + ...
+                   "epsilon = %.2f, alpha = %.2f, beta = %.2f",epsilon,alpha,beta);
+title(caption)
 
 % maximum # iterations of Newton's method
 maxit = 300;
@@ -90,6 +94,9 @@ for i = 1:(n-1)
 
     % err = computeL2Error1D(Ucoarse,Ufine,h(i));
     
+    % We just compute the max difference between the previous coarse
+    % solution and the new fine solution. As the solutions converge towards
+    % the exact solution, these differences converge to 0. 
     err(i) = computeInfError1D(Ucoarse,Ufine,Xcoarse,Xfine);
 
 end
@@ -100,6 +107,9 @@ hold on
 loglog(H(1:(end-1)),H(1:(end-1)).^2,'--',"LineWidth",lnw)
 legend("Finite difference error","h^2",'Location','Southeast','Fontsize',15)
 grid on
+caption = sprintf("Convergence plot of the FDM and NM \n" + ...
+                   "epsilon = %.2f, alpha = %.2f, beta = %.2f",epsilon,alpha,beta);
+title(caption)
 
 % Solving using built-in matlab functions
 % % Using approximate solution from (2.104)
