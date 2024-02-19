@@ -1,16 +1,26 @@
-function F = constructRhs5(m,f,g)
+function [X,Y,F] = constructRhs5(m,f,g)
+
+    X = zeros(m^2,1);
+    Y = zeros(m^2,1);
     
     F = zeros(m^2,1);
 
     h = 1/(m+1);
 
+    k = 0;
+
     for i = 1:m
         for j = 1:m
 
-            k = i+(j-1)*m;
+            k = k + 1;
+
+            % k = i+(j-1)*m;
 
             x = i*h;
             y = j*h;
+
+            X(k) = x;
+            Y(k) = y;
 
             if i == 1 && j == 1
 
@@ -67,4 +77,5 @@ function F = constructRhs5(m,f,g)
             end
         end
     end
+
 end
