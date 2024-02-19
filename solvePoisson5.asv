@@ -3,15 +3,24 @@ function [X,Y,U] = solvePoisson5(m,f,g)
     % Generating system matrix
     A = poisson5(m);
 
+    disp("0")
+
+    disp("1")
+    disp(f)
+    disp("2")
+    disp(g)
+
     % Constructing RHS
     [Xint,Yint,b] = constructRhs5(m,f,g);
 
     % Solving system (only interior nodes)
     Uint = A\b;
 
+    h = 1/(m+1);
+
     % Generating boundary coordinates
-    Xext = [linspace(0,1,m) ...
-            linspace(0,1,m) ...
+    Xext = [linspace(h,1-h,m) ...
+            linspace(h,1-h,m) ...
             zeros(1,m+2) ...
             ones(1,m+2)]';
 
@@ -19,8 +28,6 @@ function [X,Y,U] = solvePoisson5(m,f,g)
             ones(1,m) ...
             linspace(0,1,m+2) ...
             linspace(0,1,m+2)]';
-
-    sprintf("X:")
 
     % Computing g at the boundary nodes
     Uext = arrayfun(g,Xext,Yext);

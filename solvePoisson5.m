@@ -3,6 +3,9 @@ function [X,Y,U] = solvePoisson5(m,f,g)
     % Generating system matrix
     A = poisson5(m);
 
+    % f = funs{1};
+    % g = funs{2};
+
     % Constructing RHS
     [Xint,Yint,b] = constructRhs5(m,f,g);
 
