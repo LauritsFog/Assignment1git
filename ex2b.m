@@ -20,7 +20,7 @@ mdl = scatteredInterpolant(X, Y, U);
 zg = mdl(xg, yg);
 surf(xg,yg,zg)
 
-M = 2.^(1:10);
+M = 2.^(1:6);
 
 n = length(M);
 
