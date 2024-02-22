@@ -10,7 +10,7 @@ f = @(x,y) -16*(2*sin(4*pi*(x + y)) + cos(4*pi*x*y)*(x^2 + y^2))*pi^2;
 
 g = @(x,y) sin(4*pi*(x + y)) + cos(4*pi*x*y);
 
-m = 100;
+m = 50;
 
 [X,Y,U] = solvePoisson5(m,f,g);
 
@@ -19,40 +19,66 @@ mdl = scatteredInterpolant(X, Y, U);
 [xg, yg] = meshgrid(unique(X), unique(Y));
 zg = mdl(xg, yg);
 surf(xg,yg,zg)
+xlabel("x")
+ylabel("y")
+zlabel("U")
+caption = sprintf("5-point Laplacian FDM solution plot");
+title(caption)
 
-M = 2.^(1:6);
+[X,Y,U] = solvePoisson9(m,f,g);
+
+figure
+mdl = scatteredInterpolant(X, Y, U);
+[xg, yg] = meshgrid(unique(X), unique(Y));
+zg = mdl(xg, yg);
+surf(xg,yg,zg)
+xlabel("x")
+ylabel("y")
+zlabel("U")
+caption = sprintf("9-point Laplacian FDM solution plot");
+title(caption)
+
+M = 2.^(1:8);
 
 n = length(M);
 
-err = zeros(n,1);
+err5 = zeros(n,1);
+err9 = zeros(n,1);
 H = zeros(n,1);
 
 for i = 1:n
 
     H(i) = 1/(M(i)+1);
 
-    [X,Y,U] = solvePoisson5(M(i),f,g);
+    [X,Y,U5] = solvePoisson5(M(i),f,g);
+    [~,~,U9] = solvePoisson9(M(i),f,g);
     
     udiscrete = arrayfun(u,X,Y);
 
-    err(i) = max(abs(udiscrete-U));
+    err5(i) = max(abs(udiscrete-U5));
+    err9(i) = max(abs(udiscrete-U9));
 
 end
 
 % Reference convergence line
-refcon = H.^2;
+refcon2 = 10^2*H.^2;
+refcon4 = 10^3*H.^4;
 
 lnw = 1.5;
 
 figure
-loglog(H,err,'-','LineWidth',lnw)
+loglog(H,err5,'-o','LineWidth',lnw)
 hold on
-loglog(H,refcon,'--','LineWidth',lnw)
+loglog(H,err9,'-o','LineWidth',lnw)
+hold on
+loglog(H,refcon2,'--','LineWidth',lnw)
+hold on
+loglog(H,refcon4,'--','LineWidth',lnw)
 grid on
-legend("Error","Reference convergence (h^2)",Location = "southeast")
+legend("5-point FDM","9-point FDM","O(h^2)","O(h^4)",'Fontsize',15,Location = "southeast")
 xlabel('h')
-ylabel('||e||')
-caption = sprintf("Convergence plot of the 5-point Laplacian FDM");
+ylabel('Error')
+caption = sprintf("Convergence plot of the 5- and 9-point FDM");
 title(caption)
 
 % M = 2.^(1:7);

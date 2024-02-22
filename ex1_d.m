@@ -82,9 +82,9 @@ hold on
 loglog(H,order3convergence,'--',"LineWidth",lnw)
 hold on
 loglog(H,2*order4convergence,'--',"LineWidth",lnw)
-legend("(4,0)","(2,2)","h^4","h^3",'Location','Southeast','Fontsize',15)
+legend("(4,0)","(2,2)","O(h^4)","O(h^3)",'Location','Southeast','Fontsize',15)
 caption = sprintf("Convergence plots using two different 5-point FDM stencils \n");
 title(caption)
 grid on
 xlabel("h")
-ylabel("||e||")
+ylabel("Error")
