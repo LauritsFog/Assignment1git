@@ -1,4 +1,4 @@
-function [X,Y,U] = solvePoisson9(m,f,g)
+function [X,Y,U] = solvePoisson9(m,f,g,flag)
 
     % Generating system matrix
     A = poisson9(m);
@@ -7,7 +7,7 @@ function [X,Y,U] = solvePoisson9(m,f,g)
     % g = funs{2};
 
     % Constructing RHS
-    [Xint,Yint,b] = constructRhs9(m,f,g);
+    [Xint,Yint,b] = constructRhs9(m,f,g,flag);
 
     % Solving system (only interior nodes)
     Uint = A\b;

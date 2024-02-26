@@ -1,6 +1,7 @@
 clear
 clc
 close all
+set(groot,'defaultAxesFontSize',12)
 
 u = @(x,y) sin(4*pi*(x + y)) + cos(4*pi*x*y);
 
@@ -25,7 +26,7 @@ zlabel("U")
 caption = sprintf("5-point Laplacian FDM solution plot");
 title(caption)
 
-[X,Y,U] = solvePoisson9(m,f,g);
+[X,Y,U] = solvePoisson9(m,f,g,true);
 
 figure
 mdl = scatteredInterpolant(X, Y, U);
@@ -38,12 +39,16 @@ zlabel("U")
 caption = sprintf("9-point Laplacian FDM solution plot");
 title(caption)
 
-M = 2.^(1:8);
+%%
+
+M = 2.^(1:9);
 
 n = length(M);
 
 err5 = zeros(n,1);
 err9 = zeros(n,1);
+err9nocorrection = zeros(n,1);
+
 H = zeros(n,1);
 
 for i = 1:n
@@ -51,12 +56,14 @@ for i = 1:n
     H(i) = 1/(M(i)+1);
 
     [X,Y,U5] = solvePoisson5(M(i),f,g);
-    [~,~,U9] = solvePoisson9(M(i),f,g);
+    [~,~,U9] = solvePoisson9(M(i),f,g,true);
+    [~,~,U9nocorrection] = solvePoisson9(M(i),f,g,false);
     
     udiscrete = arrayfun(u,X,Y);
 
     err5(i) = max(abs(udiscrete-U5));
     err9(i) = max(abs(udiscrete-U9));
+    err9nocorrection(i) = max(abs(udiscrete-U9nocorrection));
 
 end
 
@@ -71,11 +78,13 @@ loglog(H,err5,'-o','LineWidth',lnw)
 hold on
 loglog(H,err9,'-o','LineWidth',lnw)
 hold on
+loglog(H,err9nocorrection,'-o','LineWidth',lnw)
+hold on
 loglog(H,refcon2,'--','LineWidth',lnw)
 hold on
 loglog(H,refcon4,'--','LineWidth',lnw)
 grid on
-legend("5-point FDM","9-point FDM","O(h^2)","O(h^4)",'Fontsize',15,Location = "southeast")
+legend("5-point FDM","9-point FDM with correction","9-point FDM without correction","O(h^2)","O(h^4)",'Fontsize',15,Location = "southeast")
 xlabel('h')
 ylabel('Error')
 caption = sprintf("Convergence plot of the 5- and 9-point FDM");
