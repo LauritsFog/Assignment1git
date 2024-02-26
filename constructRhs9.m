@@ -1,4 +1,4 @@
-function [X,Y,F] = constructRhs9(m,f,g)
+function [X,Y,F] = constructRhs9(m,f,g,flag)
 
     d2f = @(x,y) 256*pi^2*(4*pi^2*sin(4*pi*(x + y)) + ...
                  (-1/4 + (x^2 + y^2)^2*pi^2)*cos(4*pi*x*y) + ...
@@ -215,19 +215,30 @@ function [X,Y,F] = constructRhs9(m,f,g)
         end
     end
 
-    % f evaluated at all nodes
-    Ftemp = arrayfun(f,Xfull,Yfull);
+    if flag % flag = true -> use correction
 
-    % Computing correction term
-    correctionTerm = reshape((h^2/12)*poisson5(m+2)*Ftemp,m+2,m+2);
-
-    correctionTerm(:,1) = []; % First column
-    correctionTerm(:,end) = []; % Last column
-    correctionTerm(1,:) = []; % First row
-    correctionTerm(end,:) = []; % Last row
-
-    F = F + correctionTerm(:);
+        % % f evaluated at all nodes
+        Ftemp = arrayfun(f,Xfull,Yfull);
     
+        % Constructing poisson5 manually kindof
+        e = ones(m+2,1);
+        S = spdiags([e -2*e e], [-1 0 1], m+2, m+2);
+        I = speye(m+2);
+        A = kron(I,S)+kron(S,I);
+        A = (1/h^2)*A;
+    
+        % Computing correction term
+        correctionTerm = reshape((h^2/12)*A*Ftemp,m+2,m+2);
+    
+        correctionTerm(:,1) = []; % First column
+        correctionTerm(:,end) = []; % Last column
+        correctionTerm(1,:) = []; % First row
+        correctionTerm(end,:) = []; % Last row
+    
+        F = F + correctionTerm(:);
+    
+    end
+
     % d2F = arrayfun(d2f,X,Y);
     % 
     % correctionTerm = (h^2/12)*d2F;
