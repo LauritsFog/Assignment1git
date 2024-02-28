@@ -97,5 +97,4 @@ function [X,Y,F] = constructRhs5(m,f,g)
             end
         end
     end
-
 end

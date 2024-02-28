@@ -15,6 +15,7 @@ function Uiter = Newton(FdF,U0,tol,maxit)
 
         iter = iter + 1;
 
+        % Only adding change to interior nodes
         U(2:(end-1)) = U(2:(end-1)) + dU;
         
         Uiter = [Uiter U];

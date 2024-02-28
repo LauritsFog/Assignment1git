@@ -5,5 +5,6 @@ function A = poisson5(m)
     S = spdiags([e -2*e e], [-1 0 1], m, m);
     I = speye(m);
     A = kron(I,S)+kron(S,I);
-    A=(m+1)^2*A;
+    A = (m+1)^2*A;
+
 end

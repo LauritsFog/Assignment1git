@@ -10,7 +10,7 @@ b = 1;
 alpha = -1;
 beta = 1.5;
 
-epsilon = 0.1;
+epsilon = 0.05;
 
 w0 = 1/2*(a-b+beta-alpha);
 xbar = 1/2*(a+b-alpha-beta);
@@ -18,7 +18,7 @@ xbar = 1/2*(a+b-alpha-beta);
 % Approximate solution from (2.104)
 utilde = @(x) x-xbar+w0*tanh(w0*(x-xbar)/(2*epsilon));
 
-h = (1/(2^5));
+h = (1/(2^4));
 
 N = (b-a)/h;
 
