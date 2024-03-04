@@ -1,0 +1,7 @@
+function R = interpolate(Rc,m)
+
+    Rc = reshape
+
+    R = interp2(Rc);
+
+end

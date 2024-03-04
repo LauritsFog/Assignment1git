@@ -34,6 +34,8 @@ end
 grid on
 
 legend(strcat('m=',string(M)),'Location',"southeast")
+xlabel("omega")
+ylabel("Largest eigenvalue")
 
 % colorbar('Ticks',M,'TickLabels',string(M))
 

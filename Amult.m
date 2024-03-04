@@ -45,12 +45,12 @@ function AU = Amult(U,m)
 
             else
                 
-                AU(k) = -4*U(i,j) + U(1,j+1) + U(1,j-1) + U(i-1,j)+ U(i+1,j);
+                AU(k) = -4*U(i,j) + U(1,j+1) + U(1,j-1) + U(i-1,j) + U(i+1,j);
 
             end
         end
     end
     
-    AU = (m+1)^2*AU;
+    AU = -(m+1)^2*AU;
 
 end
