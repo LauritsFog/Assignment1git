@@ -226,7 +226,7 @@ function [X,Y,F] = constructRhs9(m,f,g,flag)
         I = speye(m+2);
         A = kron(I,S)+kron(S,I);
         A = (1/h^2)*A;
-    
+
         % Computing correction term
         correctionTerm = reshape((h^2/12)*A*Ftemp,m+2,m+2);
     
