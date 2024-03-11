@@ -9,12 +9,6 @@ function R = interpolate(Rc,m)
     % # interior nodes in fine grid
     mf = 2*m + 1;
 
-    for ci = 1:mf
-        for cj = 1:mf
-
-            
-
-        end
-    end
+    for ci = 
 
 end
