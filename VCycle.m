@@ -8,20 +8,29 @@ f = @(x,y) -16*(2*sin(4*pi*(x + y)) + cos(4*pi*x*y)*(x^2 + y^2))*pi^2;
 g = @(x,y) sin(4*pi*(x + y)) + cos(4*pi*x*y);
 
 
-L = 6;
+L = 7;
 m=2^L-1;
 U = ones(m*m,1);
 F = constructRhs5(m,f,g); %% TODO: Form the right-hand side
 epsilon = 1.0E-10;
 omega = 2/3;
 
+h=1/(m+1)
+x=linspace(h,1-h,m);
+y=linspace(h,1-h,m);
+[x,y]=meshgrid(x,y);
+z = sin(4*pi*(x + y)) + cos(4*pi*x*y)
+mesh(x,y,z);
+U=z(:)
+
+
 % test smoother. Does it work?
-for i = 1:10
-    U = smooth(U, omega, m, F);
-    plotU(m,U);
+if 1==2
+    for i = 1:100
+        U = smooth(U, omega, m, F);
+        plotU(m,U);
+    end
 end
-
-
 
 for i=1:100
     R = F + Amult(U,m);
@@ -32,7 +41,7 @@ for i=1:100
     end
     U = Vcycle(U, F, L, omega, 3);
     plotU(m,U);
-    pause(.5);
+    %pause(.5);
 end
 
 function Unew=Vcycle(U, F, l, omega, nsmooth)
@@ -87,8 +96,8 @@ end
 
 function plotU(m,U)
 h=1/(m+1);
-x=linspace(1/h,1-1/h,m);
-y=linspace(1/h,1-1/h,m);
+x=linspace(h,1-h,m);
+y=linspace(h,1-h,m);
 [X,Y]=meshgrid(x,y);
 surf(X, Y, reshape(U,[m,m])');
 shading interp;
