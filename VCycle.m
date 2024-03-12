@@ -65,7 +65,9 @@ if(l==1)
 
     %Unew = - 1/4*F*h^2;
     U_J = - 1/4*F*h^2;
-    Unew = (1-omega)*U + omega*U_J
+    %Unew = (1-omega)*U + omega*U_J
+    Unew = U_J;
+    %Unew=0;
 else
     % 1. TODO: pre-smooth the error
     %    perform <nsmooth> Jacobi iterations
@@ -75,7 +77,7 @@ else
     end
     
     % 2. TODO: calculate the residual
-    residual_ = F - Amult(U, m);
+    residual_ = F + Amult(U, m);
     %plotU(m,residual_);
     % 3. TODO: coarsen the residual
     res_coarse = coarsen2(residual_, m);
@@ -83,13 +85,13 @@ else
     
     % 4. recurse to Vcycle on a coarser grid
     e = zeros((m-1)/2 * (m-1)/2,1);
-    error_estimate = Vcycle(e, res_coarse, l-1, omega, nsmooth);
+    error_estimate = Vcycle(e, -res_coarse, l-1, omega, nsmooth);
     
     % 5. TODO: interpolate the error
     error_est_intplt = interpolate(error_estimate, (m-1)/2);
-    
+    %plotU(m,error_est_intplt);
     % 6. TODO: update the solution given the interpolated error
-    U = U + error_est_intplt;
+    U = U - error_est_intplt;
     
     % 7. TODO: post-smooth the error
     %    perform <nsmooth> Jacobi iterations
@@ -98,8 +100,6 @@ else
     end
     Unew = U;
 end
-
-disp(size(Unew))
 end
 
 

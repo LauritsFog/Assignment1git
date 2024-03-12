@@ -52,6 +52,5 @@ function AU = Amult(U,m)
     end
     
     AU = -(m+1)^(2) * AU;
-    %AU = -(m+1)^(-2) * AU;
 
 end
