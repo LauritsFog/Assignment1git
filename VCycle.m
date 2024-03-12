@@ -8,10 +8,10 @@ f = @(x,y) -16*(2*sin(4*pi*(x + y)) + cos(4*pi*x*y)*(x^2 + y^2))*pi^2;
 g = @(x,y) sin(4*pi*(x + y)) + cos(4*pi*x*y);
 
 
-L = 7;
+L = 6;
 m=2^L-1;
 U = ones(m*m,1);
-F = constructRhs5(m,f,g); %% TODO: Form the right-hand side
+[Xint,Yint,F] = constructRhs5(m,f,g); %% TODO: Form the right-hand side
 epsilon = 1.0E-10;
 omega = 2/3;
 
@@ -21,19 +21,23 @@ y=linspace(h,1-h,m);
 [x,y]=meshgrid(x,y);
 z = sin(4*pi*(x + y)) + cos(4*pi*x*y)
 mesh(x,y,z);
-U=z(:)
+%U=z(:)
 
 
 % test smoother. Does it work?
 if 1==2
-    for i = 1:100
+    for i = 1:1000
         U = smooth(U, omega, m, F);
-        plotU(m,U);
+        if mod(i,10)==1
+            plotU(m,U);
+        end;
     end
 end
 
 for i=1:100
     R = F + Amult(U,m);
+    %plotU(m,U);
+    %plotU(m,R);
     fprintf('*** Outer iteration: %3d, rel. resid.: %e\n', ...
         i, norm(R,2)/norm(F,2));
     if(norm(R, 2)/norm(F, 2) < epsilon)
