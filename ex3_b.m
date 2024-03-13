@@ -19,7 +19,7 @@ omega = 2/3;
 max_steps = 1000;
 
 max_recursions = 12;
-iterations_needed = zeros(max_recursions );
+iterations_needed = zeros(max_recursions-1);
 
 for L = 2:max_recursions
     % set mesh size
@@ -47,20 +47,12 @@ end
 
  
 % Plotting figure with residuals
-lnw = 1.5;
 fig = figure;
-plot(2.^(2:L)-1, iterations_needed,'-.',"LineWidth",lnw)
+bar(2:L, iterations_needed)
 caption = sprintf("Iterations needed to get precision ", epsilon, "\n");
-grid on
 xlabel("Iterations")
-ylabel("Mesh size")
+ylabel("Recursion depth")
 saveas(fig, "Figures/ex3b.png")
-
-
-
-
-
-
 
 
 function plotU(m,U)
