@@ -1,11 +1,12 @@
-
+% In this exercise we want to test the convergence rate of Matlabs built-in
+% solver.
 
 % Using the same functions as in exercise 2b
 u = @(x,y) sin(4*pi*(x + y)) + cos(4*pi*x*y);
 f = @(x,y) -16*(2*sin(4*pi*(x + y)) + cos(4*pi*x*y)*(x^2 + y^2))*pi^2;
 g = @(x,y) sin(4*pi*(x + y)) + cos(4*pi*x*y);
 
-m = 50;  % 50 data points.
+m = 63;  % 63 data points. as in the convergence test for the vcycle solution
 
 A=poisson5(m);  % create A-matrix
 
