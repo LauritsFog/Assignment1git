@@ -1,39 +1,44 @@
+% solution code for exercise 1.e
 
+u = @(x) exp(cos(x));  % define u-function
 
+xbar = 0;  % x-value for which we wish to approximate u
 
-% convergence test plot
-u = @(x) exp(cos(x));
-h = 0.1;
-
-xbar = 0;
-
+% a-values, as calculated in report
 a_m1 = 3/8; 
 a_0 = 6/8;
 a_1 = -1/8;
 
+% create empty array to store errors
 err1 = zeros(1,n);
-err2 = zeros(1,n);
 
+% create ampty array to store h-values for plotting
 H = zeros(1,n);
+
+% create empty arrays to store O(x^3) and O(x^4)
 order3convergence = zeros(1,n);
 order4convergence = zeros(1,n);
 
-
+% loop over mesh precision 
 for j = 1:n
     
-    h = 1/(2^j);
-    H(j) = h;
+    h = 1/(2^j);  % define mesh interval size
+    H(j) = h;  % save this value in H, for plotting
     
     % Computing reference order 3 and 4 convergence
     order3convergence(j) = h^3;
     order4convergence(j) = h^4;
     
+    % calculate approximation of u in point x0=0
     u_appr = a_m1 * u(-h/2) + a_0 * u(h/2) + a_1 * u(3*h/2);
+
+    % calculate error from ground truth and save for plotting
     err1(j) = abs(u(xbar) - u_appr);
 end
 
-lnw = 1.5;
 
+% plot error with O(x^3) and O(x^4)
+lnw = 1.5;
 figure
 loglog(H, err1,'-o',"LineWidth",lnw)
 hold on
