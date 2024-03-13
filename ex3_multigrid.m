@@ -65,9 +65,11 @@ for i=1:max_steps
         break;
     end
     U = VCycle(U, F, L, omega, 3);  % enter recursive function that approximate solution
-    plotU(m,U);  % plot the solution so far.
-    pause(.5);
+    %plotU(m,U);  % plot the solution so far.
+    %pause(.5);
 end
+
+
 
 residual_hist = residual_hist(1:i);
 normalized_residual_hist = normalized_residual_hist(1:i);
@@ -84,6 +86,13 @@ ylabel("Residual")
 saveas(fig, "Figures/ex3_multigrid_convergence.png")
 
 
+fig = figure;
+axes1 = axes('Parent',fig);
+plotU(m,U);  % plot the solution 
+view(axes1,[77.1 37.8113868613139]);
+grid(axes1,'on');
+
+saveas(fig, "Figures/ex3_multigrid_solution.png")
 
 
 
@@ -96,6 +105,7 @@ x=linspace(h,1-h,m);
 y=linspace(h,1-h,m);
 [X,Y]=meshgrid(x,y);
 surf(X, Y, reshape(U,[m,m])');
+
 shading interp;
 title('Computed solution');
 xlabel('x');
