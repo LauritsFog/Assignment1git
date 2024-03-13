@@ -6,7 +6,7 @@
 % the problem is on the form 
 % nabla^2 u = u_xx + u_yy = f, for (x,y) in inner set
 % u = g for (x, y) on the border
-
+% The border is the square [0,1] x [0,1]
 u = @(x,y) sin(4*pi*(x + y)) + cos(4*pi*x*y);  % ground truth, which we wish to arrive at
 f = @(x,y) -16*(2*sin(4*pi*(x + y)) + cos(4*pi*x*y)*(x^2 + y^2))*pi^2;
 g = @(x,y) sin(4*pi*(x + y)) + cos(4*pi*x*y);  % border conditions
@@ -16,6 +16,7 @@ g = @(x,y) sin(4*pi*(x + y)) + cos(4*pi*x*y);  % border conditions
 epsilon = 1.0E-10;
 % define omega. 2/3 is derived from plot of eigenvector analysis
 omega = 2/3;
+
 max_steps = 1000;
 
 max_recursions = 12;
@@ -24,13 +25,13 @@ iterations_needed = zeros(max_recursions-1);
 for L = 2:max_recursions
     % set mesh size
     m=2^L-1;
-    U_0 = ones(m*m,1);
+
+    % reset U to initial value
+    U = ones(m*m,1);
 
     % Form the right-hand side
     [Xint,Yint,F] = constructRhs5(m,f,g); 
     
-    % reset U to initial value
-    U = U_0;
     fprintf('Doing L = %3d\n', L);
     % loop over approximation procedure
     for i=1:max_steps 
@@ -42,7 +43,7 @@ for L = 2:max_recursions
         end
         U = VCycle(U, F, L, omega, 3);  % enter recursive function that approximate solution
     end
-    iterations_needed(L) = i;
+    iterations_needed(L) = i;  % Save number of iterations needed to reach tolerance level
 end
 
  
@@ -54,16 +55,3 @@ xlabel("Recursion depth")
 ylabel("Iterations")
 saveas(fig, "Figures/ex3b.png")
 
-
-function plotU(m,U)
-h=1/(m+1);
-x=linspace(h,1-h,m);
-y=linspace(h,1-h,m);
-[X,Y]=meshgrid(x,y);
-surf(X, Y, reshape(U,[m,m])');
-shading interp;
-title('Computed solution');
-xlabel('x');
-ylabel('y');
-zlabel('U');
-end

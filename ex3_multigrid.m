@@ -65,7 +65,7 @@ for i=1:max_steps
         break;
     end
     U = VCycle(U, F, L, omega, 3);  % enter recursive function that approximate solution
-    %plotU(m,U);  % plot the solution so far.
+    plotU(m,U);  % plot the solution so far.
     pause(.5);
 end
 
