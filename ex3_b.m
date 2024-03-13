@@ -50,8 +50,8 @@ end
 fig = figure;
 bar(2:L, iterations_needed)
 caption = sprintf("Iterations needed to get precision ", epsilon, "\n");
-xlabel("Iterations")
-ylabel("Recursion depth")
+xlabel("Recursion depth")
+ylabel("Iterations")
 saveas(fig, "Figures/ex3b.png")
 
 

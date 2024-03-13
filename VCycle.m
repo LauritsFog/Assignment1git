@@ -30,12 +30,11 @@ else
     
     % 5. TODO: interpolate the error
     error_est_intplt = interpolate(error_estimate, (m-1)/2);
-    %plotU(m,error_est_intplt);
+    
     % 6. TODO: update the solution given the interpolated error
     U = U - error_est_intplt;
     
     % 7. TODO: post-smooth the error
-    %    perform <nsmooth> Jacobi iterations
     for i = 1:nsmooth
         U = smooth(U, omega, m, F);
     end

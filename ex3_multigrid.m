@@ -81,7 +81,7 @@ caption = sprintf("Normed resdidual error, using multigrid \n");
 grid on
 xlabel("Iterations")
 ylabel("Residual")
-saveas(fig, "Figures/ex3a.png")
+saveas(fig, "Figures/ex3_multigrid_convergence.png")
 
 
 
