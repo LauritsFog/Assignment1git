@@ -21,7 +21,7 @@ else
     residual_ = F + Amult(U, m);
     %plotU(m,residual_);
     % 3. TODO: coarsen the residual
-    res_coarse = coarsen2(residual_, m);
+    res_coarse = coarsen(residual_, m);
     res_coarse = res_coarse(:);
     
     % 4. recurse to Vcycle on a coarser grid

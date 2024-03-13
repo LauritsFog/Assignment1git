@@ -1,37 +1,19 @@
 function Rc = coarsen(R,m)
-    % Assume
-    % m = 2^k-1
+    
+    % unsqueeze R into a 2d array
     R = reshape(R, m, m);
-    % # interior nodes of coarse grid
+
+    % #interior nodes of coarse grid
     mc = (m-1)/2;
 
-    % Coarse grid
-    Rc = zeros((m-1)/2, (m-1)/2);
+    % Allocate space for coarse grid
+    Rc = zeros(mc,mc);
     
-    % Gather stencil
-    FW = 1/16*[1 2 1;2 4 2;1 2 1];
-
-    % Coarse indicies
-    for ci = 1:mc
-        for cj = 1:mc
-
-            % Fine indices
-            fi = ci + (ci-1);
-            fj = cj + (cj-1);
-
-            % Gather operation using full weight stencil
-            for i = -1:1
-                for j = -1:1
-                    if fi+i >= 1 && fi+i <= m && fj+j >= 1 && fj+j <= m
-                        Rc(ci,cj) = Rc(ci,cj) + FW(i+2,j+2) * R(fi+i,fj+j);
-                    else 
-                        Rc(ci,cj) = Rc(ci,cj);
-                    end
-
-                end
-            end
-
-        end
-    end
-
+    % Add neighbours together according to the following rule:
+    % 1 * upper left        2 * above,          1 * upper right
+    % 2 * left              4 * center          2 * right
+    % 1 * lower left        2 * below           1 * lower right
+    Rc = (R(1:2:m-2, 1:2:m-2)*1 + R(1:2:m-2, 2:2:m-1)*2 + R(1:2:m-2, 3:2:m)*1 ...
+        + R(2:2:m-1, 1:2:m-2)*2 + R(2:2:m-1, 2:2:m-1)*4 + R(2:2:m-1, 3:2:m)*2 ...
+        + R(3:2:m,   1:2:m-2)*1 + R(3:2:m,   2:2:m-1)*2 + R(3:2:m,   3:2:m)*1)/16;
 end
