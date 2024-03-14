@@ -1,31 +1,37 @@
 function [X,Y,F] = constructRhs9(m,f,g,flag)
 
-    d2f = @(x,y) 256*pi^2*(4*pi^2*sin(4*pi*(x + y)) + ...
-                 (-1/4 + (x^2 + y^2)^2*pi^2)*cos(4*pi*x*y) + ...
-                 2*pi*y*sin(4*pi*x*y)*x);
-
+    % Construct empty vectors to store mesh points and rhs
     X = zeros(m^2,1);
     Y = zeros(m^2,1);
     
     F = zeros(m^2,1);
 
+    % Mesh size
     h = 1/(m+1);
 
+    % Simpler to increment k than calculating in each loop
     k = 0;
 
+    % Go through all interior mesh-points
     for i = 1:m
         for j = 1:m
 
             k = k + 1;
 
+            % Coordinates of current point
             x = i*h;
             y = j*h;
 
             X(k) = x;
             Y(k) = y;
 
-            if i == 1 && j == 1 % Bottom left
+
+            % Check if point is neighbouring exterior points and change rhs
+            % accordingly
+
+            if i == 1 && j == 1 % Bottom left point
                 
+                % Coordinates of points needed to calculate the special rhs
                 % Upleft
                 x1 = (i-1)*h;
                 y1 = (j+1)*h;
@@ -45,11 +51,12 @@ function [X,Y,F] = constructRhs9(m,f,g,flag)
                 % Downright
                 x5 = (i+1)*h;
                 y5 = (j-1)*h;
+
                 
                 F(k) = f(x,y) - (g(x1,y1) + 4*g(x2,y2) + g(x3,y3) + ...
                        4*g(x4,y4) + g(x5,y5))/(6*h^2);
 
-            elseif i == m && j == m % Top right
+            elseif i == m && j == m % Top right point
                 
                 % Downright
                 x1 = (i+1)*h;
@@ -70,11 +77,12 @@ function [X,Y,F] = constructRhs9(m,f,g,flag)
                 % Upleft
                 x5 = (i-1)*h;
                 y5 = (j+1)*h;
+
                 
                 F(k) = f(x,y) - (g(x1,y1) + 4*g(x2,y2) + g(x3,y3) + ...
                        4*g(x4,y4) + g(x5,y5))/(6*h^2);
 
-            elseif i == 1 && j == m % Top left
+            elseif i == 1 && j == m % Top left point
                 
                 % Upleft
                 x1 = (i-1)*h;
@@ -96,10 +104,11 @@ function [X,Y,F] = constructRhs9(m,f,g,flag)
                 x5 = (i+1)*h;
                 y5 = (j+1)*h;
                 
+
                 F(k) = f(x,y) - (g(x1,y1) + 4*g(x2,y2) + g(x3,y3) + ...
                        4*g(x4,y4) + g(x5,y5))/(6*h^2);
             
-            elseif i == m && j == 1 % Bottom right
+            elseif i == m && j == 1 % Bottom right point
                 
                 % Upright
                 x1 = (i+1)*h;
@@ -120,11 +129,12 @@ function [X,Y,F] = constructRhs9(m,f,g,flag)
                 % Downright
                 x5 = (i+1)*h;
                 y5 = (j-1)*h;
+
                 
                 F(k) = f(x,y) - (g(x1,y1) + 4*g(x2,y2) + g(x3,y3) + ...
                        4*g(x4,y4) + g(x5,y5))/(6*h^2);
 
-            elseif i == 1 % Left
+            elseif i == 1 % Left side of points
                 
                 % Upleft
                 x1 = (i-1)*h;
@@ -138,9 +148,10 @@ function [X,Y,F] = constructRhs9(m,f,g,flag)
                 x3 = (i-1)*h;
                 y3 = (j-1)*h;
 
+
                 F(k) = f(x,y) - (g(x1,y1) + 4*g(x2,y2) + g(x3,y3))/(6*h^2);
 
-            elseif i == m % Right
+            elseif i == m % Right side of points
                 
                 % Downright
                 x1 = (i+1)*h;
@@ -154,9 +165,10 @@ function [X,Y,F] = constructRhs9(m,f,g,flag)
                 x3 = (i+1)*h;
                 y3 = (j+1)*h;
 
+
                 F(k) = f(x,y) - (g(x1,y1) + 4*g(x2,y2) + g(x3,y3))/(6*h^2);
 
-            elseif j == 1 % Bottom
+            elseif j == 1 % Bottom side of points
                 
                 % Downright
                 x1 = (i+1)*h;
@@ -170,9 +182,10 @@ function [X,Y,F] = constructRhs9(m,f,g,flag)
                 x3 = (i-1)*h;
                 y3 = (j-1)*h;
 
+
                 F(k) = f(x,y) - (g(x1,y1) + 4*g(x2,y2) + g(x3,y3))/(6*h^2);
                 
-            elseif j == m % Top
+            elseif j == m % Top side of points
                 
                 % Upright
                 x1 = (i+1)*h;
@@ -186,9 +199,10 @@ function [X,Y,F] = constructRhs9(m,f,g,flag)
                 x3 = (i-1)*h;
                 y3 = (j+1)*h;
 
+
                 F(k) = f(x,y) - (g(x1,y1) + 4*g(x2,y2) + g(x3,y3))/(6*h^2);
 
-            else
+            else % All other points
                 
                 F(k) = f(x,y);
 
@@ -196,11 +210,14 @@ function [X,Y,F] = constructRhs9(m,f,g,flag)
         end
     end
 
+    % Iterator for calculating all points
     k = 0;
 
+    % Allocate space for saving all points (including exterior)
     Xfull = zeros((m+2)^2,1);
     Yfull = zeros((m+2)^2,1);
 
+    % Calculate coordinates
     for i = 1:(m+2)
         for j = 1:(m+2)
 
@@ -215,34 +232,35 @@ function [X,Y,F] = constructRhs9(m,f,g,flag)
         end
     end
 
+    % Correction
     if flag % flag = true -> use correction
 
-        % % f evaluated at all nodes
+        % f evaluated at all nodes
         Ftemp = arrayfun(f,Xfull,Yfull);
     
-        % Constructing poisson5 manually kindof
+        % Constructing system matrix for 5-point Laplacian that includes
+        % exterior points
         e = ones(m+2,1);
         S = spdiags([e -2*e e], [-1 0 1], m+2, m+2);
         I = speye(m+2);
         A = kron(I,S)+kron(S,I);
         A = (1/h^2)*A;
     
-        % Computing correction term
+        % Computing correction term - reshape to make it easier to remove
+        % exterior points
         correctionTerm = reshape((h^2/12)*A*Ftemp,m+2,m+2);
     
+        % Remove values for exterior points
         correctionTerm(:,1) = []; % First column
         correctionTerm(:,end) = []; % Last column
         correctionTerm(1,:) = []; % First row
         correctionTerm(end,:) = []; % Last row
     
+        
+        % Reshape to vector and add to right hand side
         F = F + correctionTerm(:);
     
     end
 
-    % d2F = arrayfun(d2f,X,Y);
-    % 
-    % correctionTerm = (h^2/12)*d2F;
-    % 
-    % F = F + correctionTerm;
 
 end
