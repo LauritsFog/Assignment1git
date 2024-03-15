@@ -22,7 +22,7 @@ m=2^L-1;
 epsilon = 1.0E-10;
 
 % reset U to initial value
-U_0 = ones(m*m,1);
+U_0 = zeros(m*m,1);
 U = U_0;
 
 % define omega. 2/3 is derived from plot of eigenvector analysis
@@ -106,7 +106,7 @@ y=linspace(h,1-h,m);
 [X,Y]=meshgrid(x,y);
 surf(X, Y, reshape(U,[m,m])');
 
-shading interp;
+% shading interp;
 title('Computed solution');
 xlabel('x');
 ylabel('y');

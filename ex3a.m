@@ -1,3 +1,7 @@
+clear
+clc
+close all
+
 % In this exercise we want to test the convergence rate of Matlabs built-in
 % solver.
 

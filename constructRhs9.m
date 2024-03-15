@@ -1,5 +1,6 @@
 function [X,Y,F] = constructRhs9(m,f,g,flag)
-
+    
+    % For testing, it's the exact second order laplacian of f. 
     d2f = @(x,y) 256*pi^2*(4*pi^2*sin(4*pi*(x + y)) + ...
                  (-1/4 + (x^2 + y^2)^2*pi^2)*cos(4*pi*x*y) + ...
                  2*pi*y*sin(4*pi*x*y)*x);
