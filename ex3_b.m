@@ -27,7 +27,7 @@ for L = 2:max_recursions
     m=2^L-1;
 
     % reset U to initial value
-    U = ones(m*m,1);
+    U = zeros(m*m,1);
 
     % Form the right-hand side
     [Xint,Yint,F] = constructRhs5(m,f,g); 
@@ -46,7 +46,7 @@ for L = 2:max_recursions
     iterations_needed(L) = i;  % Save number of iterations needed to reach tolerance level
 end
 
- 
+
 % Plotting figure with residuals
 fig = figure;
 bar(2:L, iterations_needed)

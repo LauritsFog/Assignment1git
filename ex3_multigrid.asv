@@ -74,14 +74,12 @@ end
 residual_hist = residual_hist(1:i);
 normalized_residual_hist = normalized_residual_hist(1:i);
 
-%%
-
 % Plotting figure with residuals
 lnw = 1.5;
 fig = figure;
 semilogy(normalized_residual_hist,'-.',"LineWidth",lnw)
-% hold on
-% semilogy(1:i,1./(1:i).^2,'--',"LineWidth",lnw)
+hold on
+semilogy(1:i,1/(,'-.',"LineWidth",lnw)
 legend("Multigrid",'Fontsize',15,Location = "southeast")
 caption = sprintf("Normed resdidual error, using multigrid \n");
 grid on
@@ -89,7 +87,6 @@ xlabel("Iterations")
 ylabel("Residual")
 saveas(fig, "Figures/ex3_multigrid_convergence.png")
 
-%%
 
 fig = figure;
 axes1 = axes('Parent',fig);
