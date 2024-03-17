@@ -15,7 +15,7 @@ omega = 2/3;
 
 max_steps = 1000;
 
-max_recursions = 5;
+max_recursions = 12;
 iterations_needed = zeros(max_recursions-1);
 
 for L = 2:max_recursions

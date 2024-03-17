@@ -7,11 +7,13 @@ function R = interpolate(Rc,m)
 
     % This interpolation takes the average of two neighbors (horizontal or vertical) 
     % if there are two neighbors. Otherwise it takes the average of the four diagonals
-    % x o x o x
-    % o o o o o
-    % x o x o x
-    % o o o o o 
-    % x o x o x
+    % o o o o o o o
+    % o x o x o x o
+    % o o o o o o o
+    % o x o x o x o
+    % o o o o o o o
+    % o x o x o x o
+    % o o o o o o o
 
     % fill in original values
     R(2:2:2*m, 2:2:m*2) = tmp(2:m+1, 2:m+1);

@@ -1,7 +1,7 @@
 function Rc = coarsen(R,m)
     
     % unsqueeze R into a 2d array
-    R = reshape(R, m, m);R
+    R = reshape(R, m, m);
     
     % Add neighbours together according to the following rule:
     % 1 * upper left        2 * above           1 * upper right
