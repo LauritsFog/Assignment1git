@@ -9,10 +9,10 @@ g = @(x,y) sin(4*pi*(x + y)) + cos(4*pi*x*y);  % border conditions
 
 % set recusion level and mesh size
 L = 7;
-m=2^L-1;
+m = 2^7-1;
 
 % Form the right-hand side
-[Xint,Yint,F] = constructRhs5(m,f,g); 
+[~,~,F] = constructRhs5(m,f,g); 
 
 % set epsilon to small value, for error tolerance in loop 
 epsilon = 1.0E-10;
@@ -23,16 +23,6 @@ U = U_0;
 
 % define omega. 2/3 is derived from plot of eigenvector analysis
 omega = 2/3;
-
-% for debuggin purpose, we plot the true solution
-%h=1/(m+1)
-%x=linspace(h,1-h,m);
-%y=linspace(h,1-h,m);
-%[x,y]=meshgrid(x,y);
-%z = sin(4*pi*(x + y)) + cos(4*pi*x*y)
-%mesh(x,y,z);
-%U=z(:)
-
 max_steps = 1000;
 
 % for debugging purpose, we use the smoother to get to the true solution.
@@ -70,46 +60,28 @@ end
 residual_hist = residual_hist(1:i);
 normalized_residual_hist = normalized_residual_hist(1:i);
 
-%%
+%m = 63;  % 63 data points as in the convergence test for the vcycle solution
 
-% Plotting figure with residuals
+A = -poisson5(m);  % create A-matrix
+
+[Xint,Yint,b] = constructRhs5(m,f,g);  %create right hand side of diff equation
+[X,FLAG,RELRES,ITER,RESVEC] = pcg(A, -b, 1e-8, 1000);  % Calling built-in solver
+
+% With precondition
+L = ichol(A); % precondition matrix, incomplete cholesky factorization
+[~,FLAG_pre,~,~,RESVEC_pre] = pcg(A, -b, 1e-8, 1000,L,L');  % Calling built-in solver
+
+
+% Plotting figure
 lnw = 1.5;
 fig = figure;
+semilogy(RESVEC/norm(b),'-.',"LineWidth",lnw)
+hold on
+semilogy(RESVEC_pre/norm(b),'-.',"LineWidth",lnw)
 semilogy(normalized_residual_hist,'-.',"LineWidth",lnw)
-% hold on
-% semilogy(1:i,1./(1:i).^2,'--',"LineWidth",lnw)
-legend("Multigrid",'Fontsize',15,Location = "southeast")
-caption = sprintf("Normed resdidual error, using multigrid \n");
+caption = sprintf("Convergence comparison");
 grid on
 xlabel("Iterations")
 ylabel("Residual")
-saveas(fig, "Figures/ex3_multigrid_convergence.png")
-
-%%
-
-fig = figure;
-axes1 = axes('Parent',fig);
-plotU(m,U);  % plot the solution 
-view(axes1,[77.1 37.8113868613139]);
-grid(axes1,'on');
-
-saveas(fig, "Figures/ex3_multigrid_solution.png")
-
-
-
-
-
-
-function plotU(m,U)
-h=1/(m+1);
-x=linspace(h,1-h,m);
-y=linspace(h,1-h,m);
-[X,Y]=meshgrid(x,y);
-surf(X, Y, reshape(U,[m,m])');
-
-% shading interp;
-title('Computed solution');
-xlabel('x');
-ylabel('y');
-zlabel('U');
-end
+legend("CG","PCG","Multigrid")
+saveas(fig, "Figures/ex3_comparison.png")

@@ -18,25 +18,22 @@ b = -b;
 
 % Without precondition
 [~,FLAG,~,~,RESVEC] = pcg(A, b, 1e-8, 1000);  % Calling built-in solver
-conv_rate = 2*(sqrt(cond(A))-1)/(sqrt(cond(A))+1);
-fprintf("Convergence rate: %f",conv_rate)
 
 % With precondition
 L = ichol(A); % precondition matrix, incomplete cholesky factorization
 [~,FLAG_pre,~,~,RESVEC_pre] = pcg(A, b, 1e-8, 1000,L,L');  % Calling built-in solver
 
 
+
 % Plotting figure
 lnw = 1.5;
 fig = figure;
 semilogy(RESVEC/norm(b),'-.',"LineWidth",lnw)
-hold on
-semilogy(RESVEC_pre/norm(b),'-.',"LineWidth",lnw)
+ho
 caption = sprintf("Resdidual error using pcg\n");
 grid on
 xlabel("Iterations")
 ylabel("Residual")
-legend("Without preconditioner","With preconditioner")
 title(caption)
 saveas(fig, "Figures/ex3a.png")
 

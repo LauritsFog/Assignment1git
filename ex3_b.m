@@ -1,7 +1,3 @@
-% exact solution and RHS
-% u=@(x,y) exp(pi*x).*sin(pi*y)+0.5*(x.*y).^2;
-% f=@(x,y) x.^2+y.^2;
-
 % differential equation from exercise 2b
 % the problem is on the form 
 % nabla^2 u = u_xx + u_yy = f, for (x,y) in inner set
