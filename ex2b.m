@@ -3,6 +3,7 @@ clc
 close all
 set(groot,'defaultAxesFontSize',12)
 
+% exact solution
 u = @(x,y) sin(4*pi*(x + y)) + cos(4*pi*x*y);
 
 f = @(x,y) -16*(2*sin(4*pi*(x + y)) + cos(4*pi*x*y)*(x^2 + y^2))*pi^2;
